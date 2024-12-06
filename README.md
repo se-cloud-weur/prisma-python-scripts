@@ -36,7 +36,7 @@ cp .env.example .env
 Update the `.env` file with your Prisma Cloud API credentials
 
 ```
-# Prisma Cloud API Credentials
+#Prisma Cloud API Credentials#
 PRISMA_API_URL=<your_prisma_cloud_api_url>
 PRISMA_ACCESS_KEY=<your_prisma_access_key>
 PRISMA_SECRET_KEY=<your_prisma_secret_key>
