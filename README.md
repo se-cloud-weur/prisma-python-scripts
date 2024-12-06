@@ -35,8 +35,8 @@ cp .env.example .env
 
 Update the `.env` file with your Prisma Cloud API credentials
 
+# Prisma Cloud API Credentials
 ```
-Prisma Cloud API Credentials
 PRISMA_API_URL=<your_prisma_cloud_api_url>
 PRISMA_ACCESS_KEY=<your_prisma_access_key>
 PRISMA_SECRET_KEY=<your_prisma_secret_key>
@@ -47,7 +47,7 @@ PRISMA_SECRET_KEY=<your_prisma_secret_key>
 Select from any of the following scripts:
 
 
-#vuln-rql-export.py#
+# vuln-rql-export.py
 
 Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file.
 
