@@ -33,9 +33,9 @@ Create a `.env` file in the root directory of your project. You can copy the `.e
 cp .env.example .env
 ```
 
-Update the `.env` file with your Prisma Cloud API credentials and AWS SES credentials:
+Update the `.env` file with your Prisma Cloud API credentials
 
-```ini
+```
 # Prisma Cloud API Credentials
 PRISMA_API_URL=<your_prisma_cloud_api_url>
 PRISMA_ACCESS_KEY=<your_prisma_access_key>
@@ -46,12 +46,12 @@ PRISMA_SECRET_KEY=<your_prisma_secret_key>
 
 Select from any of the following scripts:
 
-```
+
 vuln-rql-export.py
 
 Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file.
 
-```
+
 
 ### Usage
 ```
