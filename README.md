@@ -46,8 +46,11 @@ PRISMA_SECRET_KEY=<your_prisma_secret_key>
 
 Select from any of the following scripts:
 
-```vuln-rql-export.py
-  Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file.
+```
+vuln-rql-export.py
+
+Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file.
+
 ```
 
 ### Usage
@@ -55,6 +58,7 @@ Select from any of the following scripts:
 To use the script, simply run it in a terminal or pipeline:
 bash
 python vuln-query-download.py
+
 ```
 
 ### Output
