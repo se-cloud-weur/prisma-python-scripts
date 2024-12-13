@@ -9,7 +9,10 @@ There are various scripts to help with data extraction from Prisma Cloud
 - Python 3.x
 - Prisma Cloud API credentials
 
-### Installation
+
+
+
+## Installation
 
 1. **Create Python Virtual Environment (If you haven't alread)y**:
 
@@ -19,7 +22,7 @@ python3 -m virtualenv venv && source venv/bin/activate
 
 2. **Install required packages, each folder may have different requirements:**
 
-    Install the dependencies listed in `requirements.txt`:
+Install the dependencies listed in `requirements.txt`:
 
 ```bash
 pip install -r requirements.txt
@@ -35,27 +38,27 @@ cp .env.example .env
 
 Update the `.env` file with your Prisma Cloud API credentials
 
-# Prisma Cloud API Credentials
+## Prisma Cloud API Credentials
 ```
 PRISMA_API_URL=<your_prisma_cloud_api_url>
 PRISMA_ACCESS_KEY=<your_prisma_access_key>
 PRISMA_SECRET_KEY=<your_prisma_secret_key>
 ```
 
-### Options
+## Options
 
-Scripts are available in the following high level folders, dependent on their relevant function
+Scripts are available in the following high level folders dependent on their relevant function/
 -application security
 -cloud security
 -runtime security
 
 
-###Cloud Security
+### Cloud Security
 ```
 vuln-query-download.py
-
-Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors
 ```
+Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors
+
 
 
 ### Usage
