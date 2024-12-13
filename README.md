@@ -19,7 +19,7 @@ python3 -m virtualenv venv && source venv/bin/activate
 
 2. **Install required packages, each folder may have different requirements:**
 
-Install the dependencies listed in `requirements.txt`:
+    Install the dependencies listed in `requirements.txt`:
 
 ```bash
 pip install -r requirements.txt
