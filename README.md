@@ -45,7 +45,7 @@ PRISMA_ACCESS_KEY=<your_prisma_access_key>
 PRISMA_SECRET_KEY=<your_prisma_secret_key>
 ```
 
-### Usage
+## Usage
 
 To use any scripts, simply run it in a terminal or pipeline:
 
@@ -55,9 +55,9 @@ python vuln-query-download.py
 ```
 
 
-## Options
+## Scripts available:
 
-Scripts are available in the following high level folders dependent on their relevant function\
+Scripts are available in the following high level folders dependent on their relevant function
 - application security
 - cloud security
 - runtime security
