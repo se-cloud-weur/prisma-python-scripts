@@ -69,6 +69,9 @@ vuln-query-download.py
 ```
 Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors
 
-
-
+### Runtime Security
+```
+defender-details.py
+```
+Gets defender details from the runtime security console. This is useful for getting specific version information including kernel information from the deployed defenders. In the console this is located under Runtime Security\Manage\Defenders clicking on a defender and looking at the summary. The script exports all details and kernel only details to a csv
 
