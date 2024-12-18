@@ -47,8 +47,9 @@ def vuln_query(base_url, token):
     url = f"https://{base_url}/uve/api/v1/vulnerabilities/search/download"
     headers = {"content-type": "application/json","Accept": "application/octet-stream", "x-redlock-auth": token}
 
-    #Change the query you wish to recieve data from
-    payload = json.dumps({"query": "vulnerability where asset.type IN ('Package', 'Host') AND severity IN ('high', 'critical')"})
+    #Change the query you wish to recieve data from, defined in investigate/vulnerabilities in prisma
+    query = {"query": "vulnerability where asset.type IN ('Host') AND severity IN ('high', 'critical')"}
+    payload = json.dumps(query)
     response = requests.post(url, headers=headers, data=payload, stream=True)
     if response.status_code == 200:
         return response
