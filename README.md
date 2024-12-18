@@ -67,9 +67,9 @@ Scripts are available in the following high level folders dependent on their rel
 ```
 vuln-query-download.py
 ```
-Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors. Edit the query variable to change what details need to be seen. 
+Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors. Edit the query variable to change what details need to be seen. Examples are available here:
 
- [Examples are available here:](https://docs.prismacloud.io/en/enterprise-edition/content-collections/search-and-investigate/vulnerability-queries/vulnerability-query-examples)
+ [Vulnerability Query Examples](https://docs.prismacloud.io/en/enterprise-edition/content-collections/search-and-investigate/vulnerability-queries/vulnerability-query-examples)
 
 
 
