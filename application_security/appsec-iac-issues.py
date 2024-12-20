@@ -23,12 +23,12 @@ def login_saas(base_url, access_key, secret_key):
     return response.json().get("token")
 
 # Add changes here
-def appsec_intial_query(base_url, token):
+def appsec_query(base_url, token):
 
     url = f"https://{base_url}/code/api/v2/code-issues/branch_scan"
     headers = {"content-type": "application/json", "authorization": token}
     all_results = []
-    intial_query = {
+    query = {
             "filters": {
                 "checkStatus": "Error",
                 "codeCategories": [
@@ -36,21 +36,22 @@ def appsec_intial_query(base_url, token):
                 ]
             },
             "useSearchAfterPagination": True,
-            "limit": 10
+            "limit": 1000
             }
-    payload = json.dumps(intial_query)
+    payload = json.dumps(query)
     response = requests.post(url, headers=headers, data=payload)
     all_results = response.json()["data"]
 
-    next_page = True
+    #Prepare for Loop
+    next_page = response.json()["hasNext"]
     count = 0
     while next_page == True:
-        searchstring = response.json()["searchAfter"]
-        searchAfter = {"searchAfter": searchstring}
-        updated_payload = json.loads(payload)
-        updated_payload.update(searchAfter)
-        updated_payload = json.dumps(updated_payload)
-        response = requests.post(url, headers=headers, data=updated_payload)
+        searchstring = response.json()["searchAfter"] #Look for Next Page
+        searchAfter = {"searchAfter": searchstring} #Create new string to update payload
+        updated_payload = json.loads(payload) 
+        updated_payload.update(searchAfter) #Update the payload
+        updated_payload = json.dumps(updated_payload) #return back to json string
+        response = requests.post(url, headers=headers, data=updated_payload) #Updated response
         all_results.extend(response.json()["data"])
         next_page = response.json()["hasNext"]
         count += 1
@@ -95,7 +96,7 @@ def main():
 
     #Login to Prisma Cloud and Compute and get token
     token = login_saas(url, identity, secret)
-    appsec_results = appsec_intial_query(url, token)
+    appsec_results = appsec_query(url, token)
  
     if appsec_results != []:
         # Output Full details to csv (full_output.csv)
