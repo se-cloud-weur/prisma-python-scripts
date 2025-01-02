@@ -69,7 +69,11 @@ appsec-licenses-issues.py
 appsec-secrets-issues.py
 appsec-vuln-issues.py
 ```
-Application security issues from the Project part of the Application Security module. The issues have been broken down into IaC, Licenses, Secrets and Vulnerabilities. It is worth noting that the Vulnerability query that may be preferred is the one specified in the Cloud Security section as it provides more details.
+Application security issues from the Project part of the Application Security module. The issues have been broken down into IaC, Licenses, Secrets and Vulnerabilities. All data is retrieved and written to a csv file.
+
+It is worth noting that the Vulnerability query that may be preferred is the one specified in the Cloud Security section as it provides more details.
+
+
 
 
 
