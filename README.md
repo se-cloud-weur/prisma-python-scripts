@@ -62,12 +62,26 @@ Scripts are available in the following high level folders dependent on their rel
 - cloud security
 - runtime security
 
+### Application Security
+```
+appsec-iac-issues.py
+appsec-licenses-issues.py
+appsec-secrets-issues.py
+appsec-vuln-issues.py
+```
+Application security issues from the Project part of the Application Security module. The issues have been broken down into IaC, Licenses, Secrets and Vulnerabilities. It is worth noting that the Vulnerability query that may be preferred is the one specified in the Cloud Security section as it provides more details.
+
+
 
 ### Cloud Security
 ```
 vuln-query-download.py
 ```
-Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors
+Vulnerability export from the unified dashboard, An RQL can be provided for customisation and the results will get delivered to a csv file. This can be used for code, deploy and runtime assets and can include filters such as risk factors. Edit the query variable to change what details need to be seen. Examples are available here:
+
+ [Vulnerability Query Examples](https://docs.prismacloud.io/en/enterprise-edition/content-collections/search-and-investigate/vulnerability-queries/vulnerability-query-examples)
+
+
 
 ### Runtime Security
 ```

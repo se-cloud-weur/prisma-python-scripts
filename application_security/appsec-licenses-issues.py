@@ -4,6 +4,7 @@ import requests
 import argparse
 import logging
 import gzip
+import pandas as pd
 from dotenv import load_dotenv
 
 logger = logging.getLogger()
@@ -21,44 +22,42 @@ def login_saas(base_url, access_key, secret_key):
 
     return response.json().get("token")
 
-def get_compute_url(base_url, token):
-    url = f"https://{base_url}/meta_info"
-    headers = {"content-type": "application/json; charset=UTF-8", "Authorization": "Bearer " + token}
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raises a HTTPError if the status is 4xx, 5xx
-    except requests.exceptions.RequestException as err:
-        logger.error("Oops! An exception occurred in get_compute_url, ", err)
-        return None
-
-    response_json = response.json()
-    return response_json.get("twistlockUrl", None)
-
-def login_compute(base_url, access_key, secret_key):
-    url = f"{base_url}/api/v1/authenticate"
-    payload = json.dumps({"username": access_key, "password": secret_key})
-    headers = {"content-type": "application/json; charset=UTF-8"}
-    response = requests.post(url, headers=headers, data=payload)
-    return response.json()["token"]
-
 # Add changes here
-def vuln_query(base_url, token):
+def appsec_query(base_url, token):
 
-    url = f"https://{base_url}/uve/api/v1/vulnerabilities/search/download"
-    headers = {"content-type": "application/json","Accept": "application/octet-stream", "x-redlock-auth": token}
-
-    #Change the query you wish to recieve data from, defined in investigate/vulnerabilities in prisma
-    query = {"query": "vulnerability where asset.type IN ('Host') AND severity IN ('high', 'critical')"}
+    url = f"https://{base_url}/code/api/v2/code-issues/branch_scan"
+    headers = {"content-type": "application/json", "authorization": token}
+    all_results = []
+    query = {
+            "filters": {
+                "checkStatus": "Error",
+                "codeCategories": [
+                "Licenses"
+                ]
+            },
+            "useSearchAfterPagination": True,
+            "limit": 1000
+            }
     payload = json.dumps(query)
-    response = requests.post(url, headers=headers, data=payload, stream=True)
-    if response.status_code == 200:
-        return response
-    else:
-        print('API Call Failed')
+    response = requests.post(url, headers=headers, data=payload)
+    all_results = response.json()["data"]
 
-    
-       
-
+    #Prepare for Loop
+    next_page = response.json()["hasNext"]
+    count = 0
+    while next_page == True:
+        searchstring = response.json()["searchAfter"] #Look for Next Page
+        searchAfter = {"searchAfter": searchstring} #Create new string to update payload
+        updated_payload = json.loads(payload) 
+        updated_payload.update(searchAfter) #Update the payload
+        updated_payload = json.dumps(updated_payload) #return back to json string
+        response = requests.post(url, headers=headers, data=updated_payload) #Updated response
+        all_results.extend(response.json()["data"])
+        next_page = response.json()["hasNext"]
+        count += 1
+        print ("Adding Page", count, "to the query results")
+    return all_results
+        
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", action="store_true", help="Enable debug logging.")    
@@ -97,22 +96,16 @@ def main():
 
     #Login to Prisma Cloud and Compute and get token
     token = login_saas(url, identity, secret)
-    compute_url = get_compute_url(url, token)
-    compute_token = login_compute(compute_url, identity, secret)
+    appsec_results = appsec_query(url, token)
+ 
+    if appsec_results != []:
+        # Output Full details to csv (full_output.csv)
+        logger.info(f"Normalize the data and output full details to csv")
+        full_output = pd.json_normalize(appsec_results)
+        full_output.to_csv("appsec_licenses.csv", index=False)
 
-    #Get host Vulnerabilities from runtime output and send to csv and json file. (Runs from Def section)
-    vuln_query_output = vuln_query(url, token)
-
-    with open('list-vuln.csv.gz', 'wb') as file:
-       file.write(vuln_query_output.content)
-
-
-    # Convert to csv
-    with gzip.open('list-vuln.csv.gz', 'rt', newline='') as csv_file:
-        csv_data = csv_file.read()
-        with open('list-vuln.csv', 'wt') as out_file:
-            out_file.write(csv_data)
-
+    else:
+        return None    
 
     if token is None:
         logger.error("Unable to authenticate.")
