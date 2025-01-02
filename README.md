@@ -62,6 +62,16 @@ Scripts are available in the following high level folders dependent on their rel
 - cloud security
 - runtime security
 
+### Application Security
+```
+appsec-iac-issues.py
+appsec-licenses-issues.py
+appsec-secrets-issues.py
+appsec-vuln-issues.py
+```
+Application security issues from the Project part of the Application Security module. The issues have been broken down into IaC, Licenses, Secrets and Vulnerabilities. It is worth noting that the Vulnerability query that may be preferred is the one specified in the Cloud Security section as it provides more details.
+
+
 
 ### Cloud Security
 ```
