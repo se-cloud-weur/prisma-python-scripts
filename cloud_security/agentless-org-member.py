@@ -22,40 +22,20 @@ def login_saas(base_url, access_key, secret_key):
     return response.json().get("token")
 
 # Add changes here
-def org_member_update(base_url, token):
-
-    url = f"https://{base_url}/code/api/v2/code-issues/branch_scan"
-    headers = {"content-type": "application/json", "authorization": token}
-    all_results = []
-    query = {
-            "filters": {
-                "checkStatus": "Error",
-                "codeCategories": [
-                "IacMisconfiguration"
-                ]
-            },
-            "useSearchAfterPagination": True,
-            "limit": 1000
-            }
+def agentless_member_update(base_url, token, org_id, members):
+    url = f"https://{base_url}/cas/api/v1/org/{org_id}/features"
+    headers = {"content-type": "application/json","Accept": "application/json", "x-redlock-auth": token}
+    query = {"memberIds":members,"features": [{"name": "Agentless Scanning","state": "disabled"}]}
     payload = json.dumps(query)
-    response = requests.post(url, headers=headers, data=payload)
-    all_results = response.json()["data"]
 
-    #Prepare for Loop
-    next_page = response.json()["hasNext"]
-    count = 0
-    while next_page == True:
-        searchstring = response.json()["searchAfter"] #Look for Next Page
-        searchAfter = {"searchAfter": searchstring} #Create new string to update payload
-        updated_payload = json.loads(payload) 
-        updated_payload.update(searchAfter) #Update the payload
-        updated_payload = json.dumps(updated_payload) #return back to json string
-        response = requests.post(url, headers=headers, data=updated_payload) #Updated response
-        all_results.extend(response.json()["data"])
-        next_page = response.json()["hasNext"]
-        count += 1
-        print ("Adding Page", count, "to the query results")
-    return all_results
+    response = requests.put(url, headers=headers, data=payload)
+    
+    if response.status_code == 200:
+        print(response.json()["message"])
+        print(members)
+        return response
+    else:
+        print('API Call Failed')
         
 def main():
     parser = argparse.ArgumentParser()
@@ -95,16 +75,12 @@ def main():
 
     #Login to Prisma Cloud and Compute and get token
     token = login_saas(url, identity, secret)
-    appsec_results = appsec_query(url, token)
- 
-    if appsec_results != []:
-        # Output Full details to csv (full_output.csv)
-        logger.info(f"Normalize the data and output full details to csv")
-        full_output = pd.json_normalize(appsec_results)
-        full_output.to_csv("appsec_iac.csv", index=False)
 
-    else:
-        return None    
+    org_id = 627194092332
+    member_ids = ["sorton-nonmanaged","sorton-ai-project"]
+
+    agentless_update = agentless_member_update(url, token, org_id, member_ids)
+       
 
     if token is None:
         logger.error("Unable to authenticate.")
