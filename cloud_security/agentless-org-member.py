@@ -23,10 +23,10 @@ def login_saas(base_url, access_key, secret_key):
     return response.json().get("token")
 
 #Update members accounts of GCP Org, Azure Tenant or AWS Org to have agentless enabled/disabled
-def agentless_member_update(base_url, token, org_id, members):
+def agentless_member_update(base_url, token, org_id, members, state):
     url = f"https://{base_url}/cas/api/v1/org/{org_id}/features"
     headers = {"content-type": "application/json","Accept": "application/json", "x-redlock-auth": token}
-    query = {"memberIds":members,"features": [{"name": "Agentless Scanning","state": "disabled"}]} #Make change here for enabled/disabled
+    query = {"memberIds":members,"features": [{"name": "Agentless Scanning","state": f"{state}"}]} 
     payload = json.dumps(query)
 
     response = requests.put(url, headers=headers, data=payload)
@@ -96,11 +96,24 @@ def main():
     print('Enter your AWS Org ID, Azure Tenant ID or GCP Org ID')
     org_id = input()
 
+    #Set State of Agentless Scanning
+    state = []
+    user_input = input("Do you want to enable or disable Agentless Scanning? (enable/disable): ")
+    if user_input.lower() == "enable":
+        state = "enabled"
+    if user_input.lower() == "disable":
+        state = "disabled"
+    else:
+        logger.error("Invalid user input - exiting")
+        quit()
+
+
+
     #Get member ids from csv file
     member_ids = get_member_account_csv()
     
     #Update agentless member account status
-    agentless_update = agentless_member_update(url, token, org_id, member_ids)
+    agentless_update = agentless_member_update(url, token, org_id, member_ids, state)
   
     logger.info(f"======================= END =======================")
 
