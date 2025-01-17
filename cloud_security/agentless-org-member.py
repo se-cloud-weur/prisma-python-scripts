@@ -101,7 +101,7 @@ def main():
     user_input = input("Do you want to enable or disable Agentless Scanning? (enable/disable): ")
     if user_input.lower() == "enable":
         state = "enabled"
-    if user_input.lower() == "disable":
+    elif user_input.lower() == "disable":
         state = "disabled"
     else:
         logger.error("Invalid user input - exiting")
