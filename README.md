@@ -90,6 +90,11 @@ agentless-org-member.py
 ```
 This script will update the member accounts of an AWS Org, Azure Tenant or GCP org by inputting the project/account names in the csv file members_accounts.csv. A sample csv file is attached. The script will prompt for the org id as you can only update one at a time.
 
+```
+add_rs_label_iam_policy.py
+```
+This script will update the policies based on the ID's in the csv file iam_policyIds_4thFeb.csv. A sample csv file is attached. The script will update each policy to add the label 'Retain_Severity' to make sure the severity remains unchnaged when a PC update is pushed.
+
 
 ### Runtime Security
 ```
