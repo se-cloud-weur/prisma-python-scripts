@@ -95,6 +95,10 @@ add_rs_label_iam_policy.py
 ```
 This script will update the policies based on the ID's in the csv file iam_policyIds_4thFeb.csv. A sample csv file is attached. The script will update each policy to add the label 'Retain_Severity' to make sure the severity remains unchnaged when a PC update is pushed.
 
+```
+azure-subscription-onboarding.py
+```
+This script will onboard Azure subscriptions defined in a csv file. The scripts loops through the csv file and uses a common app registration. It assumes the app registration, custom roles and role assignments have been completed on the Azure side.  
 
 ### Runtime Security
 ```
