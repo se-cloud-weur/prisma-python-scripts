@@ -7,7 +7,7 @@ There are various scripts to help with data extraction from Prisma Cloud
 ### Prerequisites
 
 - Python 3.x
-- Prisma Cloud API credentials
+- Prisma Cloud API credentials (Access key and Secret)
 
 
 
@@ -97,6 +97,7 @@ This script will update the policies based on the ID's in the csv file iam_polic
 
 ```
 azure-subscription-onboarding.py
+azure-details.csv
 ```
 This script will onboard Azure subscriptions defined in a csv file. The scripts loops through the csv file and uses a common app registration. It assumes the app registration, custom roles and role assignments have been completed on the Azure side.  
 
