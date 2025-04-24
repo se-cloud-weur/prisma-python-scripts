@@ -57,7 +57,7 @@ def defenderinfo(base_url, token):
     all_results = []
     offset = 0
     # filtered to Linux hosts
-    url = f"{base_url}/api/v33.01/defenders?type=serverLinux" #Change path parameters for different queries
+    url = f"{base_url}/api/v1/defenders?type=serverLinux" #Change path parameters for different queries
     headers = {"content-type": "application/json; charset=UTF-8", "Authorization": "Bearer " + token}
 
     try:
@@ -70,7 +70,7 @@ def defenderinfo(base_url, token):
             
         # Split the query into offset of 50 (API limit) based on the total count of resources, extend them to a dataset
         for offset in range(0, total_count, 50):
-            nexturl = f"{base_url}/api/v33.01/defenders?type=serverLinux&offset={offset}"
+            nexturl = f"{base_url}/api/v1/defenders?type=serverLinux&offset={offset}" #Update type here as well
             next_response = requests.get(nexturl, headers=headers).json()
             all_results.extend(next_response)
        
