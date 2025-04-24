@@ -103,7 +103,8 @@ This script will onboard Azure subscriptions defined in a csv file. The scripts 
 
 ### Runtime Security
 ```
-defender-details.py
+defender-details-filtered.py
+defender-details-full.py
 ```
-Gets defender details from the runtime security console. This is useful for getting specific version information including kernel information from the deployed defenders. In the console this is located under Runtime Security\Manage\Defenders clicking on a defender and looking at the summary. The script exports all details and kernel only details to a csv
+Gets defender details from the runtime security console. This is useful for getting specific version information including kernel information from the deployed defenders. In the console this is located under Runtime Security\Manage\Defenders clicking on a defender and looking at the summary. The scripts exports all details and kernel only details to a csv. One is filtered to a type of defender, the other exports all details
 
