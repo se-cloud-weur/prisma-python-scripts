@@ -1,0 +1,2 @@
+totalRows,items,id,saved,query
+0,[],4e3ebe53-b1ba-47c5-b101-c8eb0e4a7f98,False,config from cloud.resource where api.name = 'azure-vm-list'
