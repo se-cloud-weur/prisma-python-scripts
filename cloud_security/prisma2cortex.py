@@ -84,7 +84,7 @@ def main():
 
     #Break down into different queries
     virtual_machines  = filtered_assets[filtered_assets['resourceTypeName'].isin(['Google Compute Engine VM Instance', 'Azure Virtual Machine', 'Azure Virtual Machine Scale Set VM', 'EC2 Instance', 'Virtual Machine' ])]
-    databases  = filtered_assets[(filtered_assets['resourceTypeName'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance']))]
+    databases  = filtered_assets[(filtered_assets['resourceTypeName'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance', 'Azure Cosmos DB']))]
     storage  = filtered_assets[filtered_assets['resourceTypeName'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account'  ])]
     
     space = '\n'
@@ -102,24 +102,10 @@ def main():
     print(storage)
     print(space)
 
-
-    # extracted_output = pd.json_normalize(filtered_assets["resourceTypeName"])
-                                   
-   
-    
-
-    # print(filtered_assets["cloudTypeName","resourceTypeName"])
-
-    
-    # vms_only.to_csv("prisma_assets.csv", index=False)
-
-    if token is None:
-        print("Unable to authenticate.")
-        return
-
-    
-
-    # logger.info(f"======================= END =======================")
+    #Write to CSV file
+    virtual_machines.to_csv('prisma_assets.csv', index=False)
+    databases.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
+    storage.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
 
 if __name__ == "__main__":
     main()
