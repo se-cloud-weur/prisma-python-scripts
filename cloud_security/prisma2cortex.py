@@ -1,0 +1,127 @@
+import os
+import json
+import requests
+import argparse
+import pandas as pd
+from dotenv import load_dotenv
+
+
+def login_saas(base_url, access_key, secret_key):
+    url = f"https://{base_url}/login"
+    payload = json.dumps({"username": access_key, "password": secret_key})
+    headers = {"content-type": "application/json; charset=UTF-8"}
+    try:
+        response = requests.post(url, headers=headers, data=payload)
+        response.raise_for_status()  # Raises a HTTPError if the status is 4xx, 5xx
+    except Exception as e:
+        print(f"Error in login_saas: {e}")
+        return None
+
+    return response.json().get("token")
+
+# Query the asset inventory for asset classes
+def asset_query(base_url, token):
+
+    url = f"https://{base_url}/v3/inventory"
+    headers = {"content-type": "application/json","Accept": "application/json", "x-redlock-auth": token}
+    payload = json.dumps({
+    "filters": [
+        {
+            "name": "asset.class",
+            "operator": "=",
+            "value": "Database"
+        },
+        {
+            "name": "asset.class",
+            "operator": "=",
+            "value": "Compute"
+        },
+         {
+            "name": "asset.class",
+            "operator": "=",
+            "value": "Storage"
+        }
+
+    ],
+     "groupBy": [
+         "resource.type"
+     ] }
+    )
+
+    response = requests.post(url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        return response.json()["groupedAggregates"] #return only the aggregates not individual items
+    else:
+        print(f"API Response: {response.status_code}")
+        print(response.json())
+
+
+
+
+def main():
+
+    load_dotenv ()
+    url = os.environ.get("PRISMA_API_URL")
+    identity = os.environ.get("PRISMA_ACCESS_KEY")
+    secret = os.environ.get("PRISMA_SECRET_KEY")
+    
+    if not url or not identity or not secret:
+        print("PRISMA_API_URL, PRISMA_ACCESS_KEY, PRISMA_SECRET_KEY variables are not set.")
+        return
+
+    #Login to Prisma Cloud and get token
+    token = login_saas(url, identity, secret)
+
+    if token is None:
+        print("Unable to authenticate.")
+        return
+
+    #Run query against inventory api
+    all_assets = asset_query(url, token)
+
+    filtered_assets= pd.json_normalize(all_assets)[['cloudTypeName', 'resourceTypeName', 'totalResources']] #Filter assets to a few columns
+
+    #Break down into different queries
+    virtual_machines  = filtered_assets[filtered_assets['resourceTypeName'].isin(['Google Compute Engine VM Instance', 'Azure Virtual Machine', 'Azure Virtual Machine Scale Set VM', 'EC2 Instance', 'Virtual Machine' ])]
+    databases  = filtered_assets[(filtered_assets['resourceTypeName'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance']))]
+    storage  = filtered_assets[filtered_assets['resourceTypeName'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account'  ])]
+    
+    space = '\n'
+
+    print(2*space)
+    print ('===============================Virtual machines===============================')
+    print(space)
+    print(virtual_machines)
+    print(space)
+    print ('===============================Databases======================================')
+    print(space)
+    print(databases)
+    print(space)
+    print ('===============================Storage========================================')
+    print(storage)
+    print(space)
+
+
+    # extracted_output = pd.json_normalize(filtered_assets["resourceTypeName"])
+                                   
+   
+    
+
+    # print(filtered_assets["cloudTypeName","resourceTypeName"])
+
+    
+    # vms_only.to_csv("prisma_assets.csv", index=False)
+
+    if token is None:
+        print("Unable to authenticate.")
+        return
+
+    
+
+    # logger.info(f"======================= END =======================")
+
+if __name__ == "__main__":
+    main()
+   
+
