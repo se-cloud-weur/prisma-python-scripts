@@ -79,31 +79,39 @@ def main():
 
     #Run query against inventory api
     all_assets = asset_query(url, token)
-
+    
     filtered_assets= pd.json_normalize(all_assets)[['cloudTypeName', 'resourceTypeName', 'totalResources']] #Filter assets to a few columns
+    filtered_assets.rename(columns={'cloudTypeName': 'Cloud', 'resourceTypeName':'Asset Type', 'totalResources': 'Count'}, inplace=True)
 
     #Break down into different queries
-    virtual_machines  = filtered_assets[filtered_assets['resourceTypeName'].isin(['Google Compute Engine VM Instance', 'Azure Virtual Machine', 'Azure Virtual Machine Scale Set VM', 'EC2 Instance', 'Virtual Machine' ])]
-    databases  = filtered_assets[(filtered_assets['resourceTypeName'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', ' Google Cloud Bigtable' 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance', 'Azure Cosmos DB']))]
-    storage  = filtered_assets[filtered_assets['resourceTypeName'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account'  ])]
+    virtual_machines  = filtered_assets[filtered_assets['Asset Type'].isin(['Google Compute Engine VM Instance', 'Azure Virtual Machine', 'Azure Virtual Machine Scale Set VM', 'EC2 Instance', 'Virtual Machine' ])]
+    serverless = filtered_assets[filtered_assets['Asset Type'].isin(['Lambda Function', 'Google Cloud Function', 'Azure Cloud Function'])]
+    databases  = filtered_assets[(filtered_assets['Asset Type'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', ' Google Cloud Bigtable' 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance', 'Azure Cosmos DB']))]
+    storage  = filtered_assets[filtered_assets['Asset Type'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account'  ])]
     
     space = '\n'
 
     print(2*space)
     print ('===============================Virtual machines===============================')
     print(space)
-    print(virtual_machines)
+    print(virtual_machines.to_string(index=False))
+    print(space)
+    print ('===============================Serverless=====================================')
+    print(space)
+    print(serverless.to_string(index=False))
     print(space)
     print ('===============================Databases======================================')
     print(space)
-    print(databases)
+    print(databases.to_string(index=False))
     print(space)
     print ('===============================Storage========================================')
-    print(storage)
+    print(space)
+    print(storage.to_string(index=False))
     print(space)
 
     #Write to CSV file
     virtual_machines.to_csv('prisma_assets.csv', index=False)
+    serverless.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
     databases.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
     storage.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
 
