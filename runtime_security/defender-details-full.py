@@ -132,7 +132,7 @@ def main():
 
         # Output Hostname and Kernel Version Only (full_hostname_kernel.csv)
         logger.info(f"extract hostname and kernel data to csv")
-        kernelOnly = (full_output[["hostname", "systemInfo.kernelVersion"]])
+        kernelOnly = (full_output[["hostname", "systemInfo.kernelVersion", "cloudMetadata.resourceID"]])
         kernelOnly.to_csv("full_hostname_kernel.csv", index=False)
     else:
         return None
