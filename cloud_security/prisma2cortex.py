@@ -86,8 +86,9 @@ def main():
     #Break down into different queries
     virtual_machines  = filtered_assets[filtered_assets['Asset Type'].isin(['Google Compute Engine VM Instance', 'Azure Virtual Machine', 'Azure Virtual Machine Scale Set VM', 'EC2 Instance', 'Virtual Machine' ])]
     serverless = filtered_assets[filtered_assets['Asset Type'].isin(['Lambda Function', 'Google Cloud Function', 'Azure Cloud Function'])]
+    caas = filtered_assets[filtered_assets['Asset Type'].isin(['ECS Fargate Container', 'ECS Container Instance', 'ECS Task Definition','ECS Service', 'ECS Fargate', 'Google Cloud Run Service', 'Azure Container Instances Container Group'  ])]
     databases  = filtered_assets[(filtered_assets['Asset Type'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', ' Google Cloud Bigtable' 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance', 'Azure Cosmos DB']))]
-    storage  = filtered_assets[filtered_assets['Asset Type'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account'  ])]
+    storage  = filtered_assets[filtered_assets['Asset Type'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account Blob Container'  ])]
     
     space = '\n'
 
@@ -99,6 +100,10 @@ def main():
     print ('===============================Serverless=====================================')
     print(space)
     print(serverless.to_string(index=False))
+    print(space)
+    print ('===============================CaaS===========================================')
+    print(space)
+    print(caas.to_string(index=False))
     print(space)
     print ('===============================Databases======================================')
     print(space)
@@ -112,6 +117,7 @@ def main():
     #Write to CSV file
     virtual_machines.to_csv('prisma_assets.csv', index=False)
     serverless.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
+    caas.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
     databases.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
     storage.to_csv('prisma_assets.csv', mode='a', index=False) #append to existing csv
 
