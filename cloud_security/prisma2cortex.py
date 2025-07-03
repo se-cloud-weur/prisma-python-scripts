@@ -84,7 +84,7 @@ def main():
 
     #Break down into different queries
     virtual_machines  = filtered_assets[filtered_assets['resourceTypeName'].isin(['Google Compute Engine VM Instance', 'Azure Virtual Machine', 'Azure Virtual Machine Scale Set VM', 'EC2 Instance', 'Virtual Machine' ])]
-    databases  = filtered_assets[(filtered_assets['resourceTypeName'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance', 'Azure Cosmos DB']))]
+    databases  = filtered_assets[(filtered_assets['resourceTypeName'].isin(['RDS Database Instance', 'Amazon DynamoDB Table', 'Google BigQuery Dataset', 'Google Cloud SQL DB Instance', ' Google Cloud Bigtable' 'Azure SQL Server', 'Azure SQL Database', 'Azure SQL Managed Instance', 'Azure Cosmos DB']))]
     storage  = filtered_assets[filtered_assets['resourceTypeName'].isin(['S3 Bucket', 'Google Cloud Storage Bucket', 'Azure Storage Account'  ])]
     
     space = '\n'
